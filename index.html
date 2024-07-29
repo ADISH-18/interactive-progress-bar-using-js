@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Progress Bar</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #282c34;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            transition: background-color 1s ease, transform 1s ease;
+        }
+
+        .container {
+            text-align: center;
+            width: 80%;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background: #444;
+            border-radius: 25px;
+            overflow: hidden;
+            margin: 20px auto;
+            padding: 5px;
+            position: relative;
+            height: 30px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #4caf50, #81c784);
+            border-radius: 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: width 1s ease-in-out;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .progress-message {
+            font-size: 20px;
+            margin-top: 10px;
+            color: #ffffff;
+        }
+
+        .btn {
+            background-color: #4caf50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+        body.complete {
+            background-color: #4caf50; 
+            animation: confetti 2s ease-in-out forwards, pulse 2s infinite;
+        }
+
+        @keyframes confetti {
+            0% {
+                background: #4caf50;
+            }
+            100% {
+                background: #4caf50;
+                background-image: radial-gradient(circle at 10% 10%, #ff5722 0%, transparent 20%), radial-gradient(circle at 20% 20%, #ff9800 0%, transparent 20%), radial-gradient(circle at 30% 30%, #ffc107 0%, transparent 20%), radial-gradient(circle at 40% 40%, #8bc34a 0%, transparent 20%), radial-gradient(circle at 50% 50%, #00bcd4 0%, transparent 20%);
+                background-size: 200% 200%;
+                background-repeat: no-repeat;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="progress-message" id="progress-message">Start Exercising!</div>
+        <button class="btn" id="reset-btn">Reset</button>
+        <button class="btn" id="advance-btn">Advance</button>
+    </div>
+
+    <script>
+        const progressBar = document.getElementById('progress-bar');
+        const progressMessage = document.getElementById('progress-message');
+        const resetBtn = document.getElementById('reset-btn');
+        const advanceBtn = document.getElementById('advance-btn');
+        const body = document.body;
+
+        let progress = 0;
+
+        const messages = [
+            { percent: 0, text: "Start your journey! You are 10% there!!" },
+            { percent: 10, text: "Rise and Grind! Keep on pushing!" },
+            { percent: 20, text: "Push Your Limits! COME ON COME ON!!" },
+            { percent: 30, text: "Sweat is Your Fat Crying! EASY...EASY..." },
+            { percent: 40, text: "No Pain, No Gain! Almost Halfway!" },
+            { percent: 50, text: "Stronger Every Rep! COME ON HALFWAY DONE!" },
+            { percent: 60, text: "Conquer the Day! PUSH...PUSH..." },
+            { percent: 70, text: "Crush Your Enemies!" },
+            { percent: 80, text: "Embrace the Struggle, Find Your Strength! 75% Completed!" },
+            { percent: 90, text: "Persist Through Pain, Achieve Your Dreams! LAST rep!!" },
+            { percent: 100, text: "Congrats! You Conquered It!" }
+        ];
+
+        function updateProgress() {
+            progressBar.style.width = `${progress}%`;
+            updateMessage();
+            if (progress === 100) {
+                body.classList.add('complete');
+            } else {
+                body.classList.remove('complete');
+            }
+        }
+
+        function updateMessage() {
+            const message = messages.find(msg => progress === msg.percent);
+            if (message) {
+                progressMessage.textContent = message.text;
+            } else {
+                progressMessage.textContent = "";
+            }
+        }
+
+        resetBtn.addEventListener('click', () => {
+            progress = 0;
+            updateProgress();
+        });
+
+        advanceBtn.addEventListener('click', () => {
+            if (progress < 100) {
+                progress += 5;
+                updateProgress();
+            }
+        });
+    </script>
+</body>
+</html>
